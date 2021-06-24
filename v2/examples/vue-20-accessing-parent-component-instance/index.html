@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dependency Injection Baidu Maps Demo</title>
+    <script
+      type="text/javascript"
+      src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=T0Yek5FO7GTE8cVbhOoc7DBLuP0tQwIk"
+    ></script>
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+      .map {
+        width: 100%;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <baidu-map>
+        <baidu-map-marker v-bind:places="vueConfCities"></baidu-map-marker>
+      </baidu-map>
+    </div>
+
+    <script>
+      function mapDemo() {}
+
+      Vue.component("baidu-map", {
+        data: function () {
+          return {
+            map: null
+          };
+        },
+        mounted: function () {
+		  // 添加标记点 - 地图JS API示例 _ 百度地图开放平台
+		  // https://lbsyun.baidu.com/jsdemo.htm#eAddMarker
+          this.map = new BMapGL.Map(this.$el); // 创建Map实例
+
+          this.map.centerAndZoom(new BMapGL.Point(116.404, 39.928), 15);  // 初始化地图,设置中心点坐标和地图级别
+          this.map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+
+          // this.map.setHeading(64.5);
+          // this.map.setTilt(73);
+        },
+        methods: {
+          getMap: function (found) {
+            var vm = this;
+            function checkForMap() {
+              if (vm.map) {
+                found(vm.map);
+              } else {
+                setTimeout(checkForMap, 50);
+              }
+            }
+            checkForMap();
+          }
+        },
+        template: '<div class="map"><slot></slot></div>'
+      });
+
+      Vue.component("baidu-map-marker", {
+        props: ["places"],
+        created: function () {
+          var vm = this;
+          vm.$parent.getMap(function (map) {
+            vm.places.forEach(function (place) {
+              var mk = new BMapGL.Marker(
+                new BMapGL.Point(place.position.lat, place.position.lng)
+              );
+              map.addOverlay(mk);
+            });
+          });
+        },
+        render(h) {
+          return null;
+        }
+      });
+
+      new Vue({
+        el: "#app",
+        data: {
+          vueConfCities: [
+            {
+              name: "marker 1",
+              position: {
+                lat: 116.404,
+                lng: 39.925
+              }
+            },
+            {
+              name: "marker 2",
+              position: {
+                lat: 116.395,
+                lng: 39.935
+              }
+            }
+          ]
+        }
+      });
+    </script>
+  </body>
+</html>
