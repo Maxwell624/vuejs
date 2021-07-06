@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create component by using template - VUE</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <h3>Declarative rendering</h3>
+
+    <div id="app">
+      <!-- 调用组件 -->
+      <my-com></my-com>
+
+        <div @click="parentShow">
+            <div :class="{red: false, bold: true }">{{12|currency('￥')}}</div>
+            <input type="button" value="按钮" @click.prevent.stop="show">
+        </div>
+
+        <input type="button" value="可见" @click="isShow">
+        <div style="width:100px; height:100px; background: red" v-show="isShowBlock">
+        </div>
+    </div>
+
+    <!--
+      template标签构建，需在标签上加id属性用以后期注册
+    -->
+    <template id="myCom">
+      <div>This is a VUE component.(use < template > tag)</div>
+    </template>
+
+    <script>
+      // 全局注册创建的myCom组件
+      // 用template及script标签构建的组件，第二个参数就改为它们标签上的id值
+      // 在需要调用组件的地方写上组件名字的标签即可  <my-com></my-com>
+      Vue.component('myCom', {
+        template: '#myCom'
+      });
+
+
+      var app = new Vue({
+        el: '#app',
+          data: {
+              isShowBlock: false
+          },
+          methods:{
+              show: function(ev) {
+                  console.log(11111111, ev.clientX, ev.clientY);
+              },
+              parentShow: function(ev) {
+                  console.log(ev.clientX);
+              },
+              isShow: function() {
+                  this.isShowBlock = !this.isShowBlock;
+                  console.log(this.isShowBlock);
+              }
+          },
+          filters: {
+              currency: function(val, aa) {
+                  if (!val) return '';
+                  console.log(...arguments, val, aa);
+                  return aa + val;
+              }
+          }
+      });
+    </script>
+  </body>
+</html>
