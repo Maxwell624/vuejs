@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create component by using script</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <h3>Create component by using script</h3>
+
+    <div id="app">
+      <!-- 调用组件 -->
+      <my-com></my-com>
+    </div>
+
+    <!--
+      template标签构建，需在标签上加id属性用以后期注册
+    -->
+    <script type="text/x-template" id="myCom">
+      <div>This is a VUE component. (use &lt;script script type="text/x-template"&gt; tag)</div>
+    </script>
+    
+    <script>
+    // 全局注册创建的myCom组件
+    // 用template及script标签构建的组件，第二个参数就改为它们标签上的id值
+    // 在需要调用组件的地方写上组件名字的标签即可  <my-com></my-com>
+    Vue.component('myCom', {
+      template: '#myCom'
+    });
+
+    var app = new Vue({
+      el: '#app'
+    });
+    </script>
+  </body>
+</html>
