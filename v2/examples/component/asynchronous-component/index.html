@@ -22,7 +22,7 @@
       // 用template及script标签构建的组件，第二个参数就改为它们标签上的id值
       // 在需要调用组件的地方写上组件名字的标签即可  <my-com></my-com>
       Vue.component('headerCom', function(resolve, reject) {
-        $.get('http://jsrun.net/ishKp').then(function(res) {
+        $.get('https://github.com/Maxwell624/vuejs/raw/main/v2/examples/component/asynchronous-component/head.html').then(function(res) {
           resolve({
             template: res
           })
