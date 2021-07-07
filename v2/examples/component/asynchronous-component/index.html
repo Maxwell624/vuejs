@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create component by using ajax get</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.12.0/jquery.min.js"></script>
+
+  </head>
+  <body>
+    <h3>asynchronous component</h3>
+    
+    <div id="app">
+      <!-- 调用组件 -->
+      <header-com></header-com>
+    </div>
+
+    <script>
+      // 全局注册创建的myCom组件
+      // 用template及script标签构建的组件，第二个参数就改为它们标签上的id值
+      // 在需要调用组件的地方写上组件名字的标签即可  <my-com></my-com>
+      Vue.component('headerCom', function(resolve, reject) {
+        $.get('http://jsrun.net/ishKp').then(function(res) {
+          resolve({
+            template: res
+          })
+        });
+      });
+    </script>
+  </body>
+</html>
