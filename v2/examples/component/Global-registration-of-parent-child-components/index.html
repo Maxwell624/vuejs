@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Global registration of parent-child components</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <h3>Global registration of parent-child components</h3>
+
+    <div id="app">
+      <parent></parent>
+    </div>
+
+    <script>
+      var child = Vue.extend({
+        template: '<div>这是子组件 - 全局注册</div>'
+      });
+      Vue.component('child', child);
+
+      // 包含子组件
+      var parent = Vue.extend({
+        template: '<div>这是父组件 - 全局注册 <child></child></div>'
+      });
+      Vue.component('parent', parent);
+
+      var app = new Vue({
+        el: '#app'
+      });
+    </script>
+  </body>
+</html>
