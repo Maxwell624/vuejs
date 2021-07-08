@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The parent sends the message to the child</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <h3>The parent sends the message to the child</h3>
+
+    <div id="app">
+      <parent ref="c1"></parent>
+        <button v-on:click="changeProps">重新传值 hehe...</button>
+    </div>
+
+    <script>
+      // 父组件传消息到子组件使用 props，
+      // 并且这传递是单向的，只能由父组件传到子组件。
+      /*
+      父组件中数据发生变化，子组件中自动更新
+      子组件不可直接修改通过props获取到的父组件中的数据
+
+      Vue组件实例间的直接访问
+      https://www.cnblogs.com/xiaohuochai/p/7396741.html
+      */
+      var child = Vue.extend({
+        template: '<div>这是子组件 {{pdata}}</div>',
+        props: ['pdata']
+      });
+
+      // 在父组件中增加data，并绑定到子组件上
+      var parent = Vue.extend({
+        // :pdata  <==>  v-bind:pdata
+        template: '<div>这是父组件 - 局部注册 <child :pdata=data></child></div>',
+        data(){
+          return {
+            data: '来自父组件的数据'
+          }
+        },
+        components: {
+          'child': child
+        }
+      });
+      // Vue.component('parent', parent);
+
+      var app = new Vue({
+        el: '#app',
+        components: {
+          parent: parent
+        },
+          methods: {
+              changeProps: function() {
+                  console.log('changeProps');
+                  this.$refs.c1.data = 'hehe...';
+              }
+          }
+      });
+    </script>
+  </body>
+</html>
