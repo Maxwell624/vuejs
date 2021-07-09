@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The brother sends the message to the brother</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <h3>The brother sends the message to the brother</h3>
+    
+    <div id="app">
+      <my-com1></my-com1>
+      <my-com2></my-com2>
+    </div>
+
+    <script>
+      /*
+      兄弟组件间通信也是用的emit。
+      但原生vue.js需要新建一个空的vue实例来当桥梁。
+      */
+      var bus = new Vue();
+
+      var myCom1 = Vue.extend({
+        template: '<div><button @click="change">组件1: 点击给兄弟组件传值</button></div>',
+        methods: {
+          change: function(){
+            // 通过空实例去触发emit
+            bus.$emit('posttobro', 10);
+          }
+        }
+      });
+
+      var myCom2 = Vue.extend({
+        template: '<div>组件2: 来自兄弟组件的值为： {{datafrombro}} </div>',
+        data(){
+          return {
+            datafrombro:''
+          }
+        },
+        mounted: function(){
+          // 接收emit事件
+          bus.$on('posttobro', function(val){
+            this.datafrombro = val
+          }.bind(this))
+        }
+      });
+
+      Vue.component('myCom1', myCom1);
+      Vue.component('myCom2', myCom2);
+
+      var app = new Vue({
+        el: '#app'
+      });
+
+    </script>
+  </body>
+</html>
