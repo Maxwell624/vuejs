@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The child sends the message to the parent</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <h3>The child sends the message to the parent</h3>
+    
+    <div id="app">
+      <parent></parent>
+    </div>
+
+    <script>
+      // 父组件传消息到子组件使用props，
+      // 并且这传递是单向的，只能由父组件传到子组件。
+      /*
+      父组件中数据发生变化，子组件中自动更新
+      子组件不可直接修改通过props获取到的父组件中的数据
+      */
+      var child = Vue.extend({
+        template: '<div><button @click="childclick">子组件：点击给父组件传值: 10</button></div>',
+        methods: {
+          childclick: function(){
+            this.$emit('posttoparent', 10);
+          }
+        }
+      });
+
+      // 父组件接收 emit事件 通过v-on指令，格式为：
+      // v-on:emit方法名="父组件方法"
+      var parent = Vue.extend({
+        template: '<div>父组件：来自子组件的值为：{{datafromchild}} <child v-on:posttoparent="getfromchild"></child></div>',
+        data(){
+          return {
+            datafromchild: ''
+          }
+        },
+        components: {
+          'child': child
+        },
+        methods: {
+          getfromchild: function(val){
+            this.datafromchild = val;
+          }
+        }
+      });
+
+      var app = new Vue({
+        el: '#app',
+        components: {
+          parent: parent
+        }
+      });
+    </script>
+  </body>
+</html>
